@@ -24,14 +24,13 @@ func (c *Client) NewID(ctx context.Context) (id string, err error) {
 }
 
 func (c *Client) NewIDs(ctx context.Context, size int) (ids []string, err error) {
-	in := &NewIDQuery{Size: size}
-	out := &NewIDResp{}
+	in, out := &NewIDQuery{Size: size}, &NewIDResp{}
 
-	if err = c.client.Query("IDService", "NewID").In(in).Out(out).Do(ctx); err != nil {
+	if err = c.client.Query("IDService.NewID", in, out).Do(ctx); err != nil {
 		return
 	}
 	if len(out.IDs) != size {
-		err = errors.New("invalid number of IDService replies")
+		err = errors.New("invalid number of IDService.NewID replies")
 		return
 	}
 	ids = out.IDs
