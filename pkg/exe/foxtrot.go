@@ -2,29 +2,20 @@ package exe
 
 import (
 	"context"
-	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
+	"nautilus/pkg/foxtrot"
 	"os"
 	"os/signal"
 	"syscall"
 )
 
-func NewEcho() *echo.Echo {
-	e := echo.New()
-	return e
-}
-
-func RunEcho(e *echo.Echo, addr string) (err error) {
-	e.HidePort = true
-	e.HideBanner = true
-
+func RunFoxtrot(f *foxtrot.Foxtrot) (err error) {
 	chErr := make(chan error, 1)
 	chSig := make(chan os.Signal, 1)
 	signal.Notify(chSig, syscall.SIGTERM, syscall.SIGINT)
-	go func() {
-		chErr <- e.Start(addr)
-	}()
-	defer e.Shutdown(context.Background())
+	f.Start(chErr)
+	defer f.Shutdown(context.Background())
+
 	select {
 	case err = <-chErr:
 	case sig := <-chSig:
