@@ -3,6 +3,7 @@ WORKDIR /nautilus
 ADD . .
 RUN go build -mod vendor -o /usr/local/bin/svc_id nautilus/cmd/svc_id
 RUN go build -mod vendor -o /usr/local/bin/svc_id_test nautilus/cmd/svc_id_test
+RUN go build -mod vendor -o /usr/local/bin/web_main nautilus/cmd/web_main
 
 FROM debian:10
 ENV TZ=Asia/Shanghai
@@ -13,4 +14,5 @@ RUN apt-get update && \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 COPY --from=builder /usr/local/bin/svc_id /usr/local/bin/svc_id
 COPY --from=builder /usr/local/bin/svc_id_test /usr/local/bin/svc_id_test
+COPY --from=builder /usr/local/bin/web_main /usr/local/bin/web_main
 ADD assets /assets
