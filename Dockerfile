@@ -13,3 +13,4 @@ RUN apt-get update && \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 COPY --from=builder /usr/local/bin/svc_id /usr/local/bin/svc_id
 COPY --from=builder /usr/local/bin/svc_id_test /usr/local/bin/svc_id_test
+ADD assets /assets

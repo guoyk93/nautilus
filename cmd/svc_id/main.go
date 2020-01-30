@@ -1,17 +1,14 @@
 package main
 
 import (
-	"context"
 	"errors"
 	"github.com/rs/zerolog/log"
 	"go.guoyk.net/env"
 	"go.guoyk.net/nrpc/v2"
 	"go.guoyk.net/snowflake"
+	"nautilus/pkg/exe"
 	"nautilus/pkg/in_k8s"
 	"nautilus/svc/svc_id"
-	"os"
-	"os/signal"
-	"syscall"
 	"time"
 )
 
@@ -28,13 +25,6 @@ var (
 const (
 	Uint5Mask = uint64(1<<5) - 1
 )
-
-func exit(err *error) {
-	if *err != nil {
-		log.Error().Str("topic", "main").Str("service", "IDService").Err(*err).Msg("exited")
-		os.Exit(1)
-	}
-}
 
 func setup() (err error) {
 	if err = env.StringVar(&optBind, "BIND", ":3000"); err != nil {
@@ -71,7 +61,10 @@ func setup() (err error) {
 
 func main() {
 	var err error
-	defer exit(&err)
+	defer exe.Exit(&err)
+
+	exe.Project = "svc_id"
+	exe.Setup()
 
 	if err = setup(); err != nil {
 		return
@@ -81,30 +74,10 @@ func main() {
 
 	svc := svc_id.NewIDService(snowflake.New(startTime, instanceID))
 
-	log.Info().Str(
-		"topic", "main",
-	).Str(
-		"service", "IDService",
-	).Uint64(
-		"cluster_id", optClusterID,
-	).Uint64(
-		"worker_id", optWorkerID,
-	).Uint64(
-		"instance_id", instanceID,
-	).Msg("started")
-
-	chErr := make(chan error, 1)
-	chSig := make(chan os.Signal, 1)
-	signal.Notify(chSig, syscall.SIGTERM, syscall.SIGINT)
+	log.Info().Uint64("cluster_id", optClusterID).Uint64("worker_id", optWorkerID).Msg("started")
 
 	s := nrpc.NewServer(nrpc.ServerOptions{Addr: ":3000"})
 	s.Register(svc)
-	s.Start(chErr)
-	defer s.Shutdown(context.Background())
 
-	select {
-	case err = <-chErr:
-	case sig := <-chSig:
-		log.Info().Str("topic", "main").Str("service", "IDService").Str("signal", sig.String()).Msg("signaled")
-	}
+	err = exe.RunNRPCServer(s)
 }
