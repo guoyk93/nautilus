@@ -9,6 +9,11 @@ import (
 	"syscall"
 )
 
+func NewEcho() *echo.Echo {
+	e := echo.New()
+	return e
+}
+
 func RunEcho(e *echo.Echo, addr string) (err error) {
 	e.HidePort = true
 	e.HideBanner = true

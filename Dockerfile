@@ -4,6 +4,7 @@ ADD . .
 RUN go build -mod vendor -o /usr/local/bin/svc_id nautilus/cmd/svc_id
 RUN go build -mod vendor -o /usr/local/bin/svc_id_test nautilus/cmd/svc_id_test
 RUN go build -mod vendor -o /usr/local/bin/web_main nautilus/cmd/web_main
+RUN go build -mod vendor -o /usr/local/bin/web_null nautilus/cmd/web_null
 
 FROM debian:10
 ENV TZ=Asia/Shanghai
@@ -15,4 +16,5 @@ RUN apt-get update && \
 COPY --from=builder /usr/local/bin/svc_id /usr/local/bin/svc_id
 COPY --from=builder /usr/local/bin/svc_id_test /usr/local/bin/svc_id_test
 COPY --from=builder /usr/local/bin/web_main /usr/local/bin/web_main
+COPY --from=builder /usr/local/bin/web_null /usr/local/bin/web_null
 ADD assets /assets
