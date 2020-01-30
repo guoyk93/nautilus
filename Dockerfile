@@ -10,4 +10,4 @@ RUN apt-get update && \
     apt-get install -y tzdata ca-certificates && \
     rm -rf /var/lib/apt/lists/* && \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-COPY --from=builder /nautilus/cmd/svc_id /bin/svc_id
+COPY --from=builder /nautilus/cmd/svc_id/svc_id /bin/svc_id
