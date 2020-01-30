@@ -10,7 +10,8 @@ import (
 )
 
 type Options struct {
-	Addr string
+	Addr        string
+	HealthCheck func() error
 }
 
 type Foxtrot struct {
@@ -25,6 +26,19 @@ func New(opts Options) *Foxtrot {
 	e := echo.New()
 	e.HideBanner = true
 	e.HidePort = true
+	// health check
+	hc := opts.HealthCheck
+	e.Any("/healthz", func(c echo.Context) error {
+		if hc == nil {
+			return c.String(http.StatusOK, "OK")
+		} else {
+			if err := hc(); err != nil {
+				return c.String(http.StatusInternalServerError, err.Error())
+			} else {
+				return c.String(http.StatusOK, "OK")
+			}
+		}
+	})
 	// pprof
 	e.Any("/debug/pprof/", echo.WrapHandler(http.HandlerFunc(pprof.Index)))
 	e.Any("/debug/pprof/cmdline", echo.WrapHandler(http.HandlerFunc(pprof.Cmdline)))
