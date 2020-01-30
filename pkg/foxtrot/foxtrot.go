@@ -7,10 +7,12 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"net/http"
 	"net/http/pprof"
+	"path/filepath"
 )
 
 type Options struct {
 	Addr        string
+	AssetDir    string
 	HealthCheck func() error
 }
 
@@ -26,6 +28,7 @@ func New(opts Options) *Foxtrot {
 	e := echo.New()
 	e.HideBanner = true
 	e.HidePort = true
+	e.Renderer = NewTemplate(filepath.Join(opts.AssetDir, "template"))
 	// health check
 	hc := opts.HealthCheck
 	e.Any("/healthz", func(c echo.Context) error {
@@ -45,6 +48,8 @@ func New(opts Options) *Foxtrot {
 	e.Any("/debug/pprof/profile", echo.WrapHandler(http.HandlerFunc(pprof.Profile)))
 	e.Any("/debug/pprof/symbol", echo.WrapHandler(http.HandlerFunc(pprof.Symbol)))
 	e.Any("/debug/pprof/trace", echo.WrapHandler(http.HandlerFunc(pprof.Trace)))
+	// static
+	e.Static("/", filepath.Join(opts.AssetDir, "public"))
 	// log
 	e.Use(NewLogger())
 	// recover

@@ -1,19 +1,28 @@
 package main
 
 import (
-	"github.com/labstack/echo/v4"
 	"go.guoyk.net/env"
+	"go.guoyk.net/nrpc/v2"
 	"nautilus/pkg/exe"
 	"nautilus/pkg/foxtrot"
-	"net/http"
+	"nautilus/svc/svc_id"
+	"nautilus/web/web_main"
 )
 
 var (
-	optBind string
+	optBind          string
+	optAssetDir      string
+	optServiceIDAddr string
 )
 
 func setup() (err error) {
 	if err = env.StringVar(&optBind, "BIND", ":4000"); err != nil {
+		return
+	}
+	if err = env.StringVar(&optAssetDir, "ASSET_DIR", "/assets/web_main"); err != nil {
+		return
+	}
+	if err = env.StringVar(&optServiceIDAddr, "SERVICE_ID_ADDR", "svc-id:3000"); err != nil {
 		return
 	}
 	return
@@ -30,11 +39,19 @@ func main() {
 		return
 	}
 
-	f := foxtrot.New(foxtrot.Options{Addr: optBind})
-
-	f.GET("/", func(ctx echo.Context) error {
-		return ctx.String(http.StatusOK, "网站正在维护中\n京ICP备15056756号-1")
+	f := foxtrot.New(foxtrot.Options{
+		Addr:     optBind,
+		AssetDir: optAssetDir,
 	})
+
+	c := nrpc.NewClient(nrpc.ClientOptions{})
+	c.Register("IDService", optServiceIDAddr)
+
+	w := &web_main.Web{
+		ClientID: svc_id.NewClient(c),
+	}
+
+	f.GET("/", w.Index)
 
 	err = exe.RunFoxtrot(f)
 }
