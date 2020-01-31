@@ -14,6 +14,8 @@ github.com/chanxuehong/wechat/internal/debug/api/retry
 github.com/chanxuehong/wechat/internal/debug/callback
 github.com/chanxuehong/wechat/internal/util
 github.com/chanxuehong/wechat/mp/core
+github.com/chanxuehong/wechat/mp/message/callback/request
+github.com/chanxuehong/wechat/mp/message/callback/response
 github.com/chanxuehong/wechat/util
 # github.com/creasty/defaults v1.3.0
 github.com/creasty/defaults
