@@ -51,6 +51,9 @@ func main() {
 	ms := core.NewServer(optsMP.Org, optsMP.AppID, optsMP.AppToken, optsMP.AppAESKey, mmux, nil)
 
 	mux := http.NewServeMux()
+	mux.HandleFunc("/healthz", func(rw http.ResponseWriter, req *http.Request) {
+		_, _ = rw.Write([]byte("OK"))
+	})
 	mux.HandleFunc("/mp_callback/callback", func(rw http.ResponseWriter, req *http.Request) {
 		ms.ServeHTTP(rw, req, nil)
 	})
