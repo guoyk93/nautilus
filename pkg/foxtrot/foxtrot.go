@@ -11,9 +11,10 @@ import (
 )
 
 type Options struct {
-	Addr        string
-	AssetDir    string
-	HealthCheck func() error
+	Addr           string
+	AssetDir       string
+	ReloadTemplate bool
+	HealthCheck    func() error
 }
 
 type Foxtrot struct {
@@ -28,7 +29,7 @@ func New(opts Options) *Foxtrot {
 	e := echo.New()
 	e.HideBanner = true
 	e.HidePort = true
-	e.Renderer = NewTemplate(filepath.Join(opts.AssetDir, "template"))
+	e.Renderer = NewTemplate(filepath.Join(opts.AssetDir, "template"), opts.ReloadTemplate)
 	// health check
 	hc := opts.HealthCheck
 	e.Any("/healthz", func(c echo.Context) error {

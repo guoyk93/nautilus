@@ -10,9 +10,10 @@ import (
 )
 
 var (
-	optBind          string
-	optAssetDir      string
-	optServiceIDAddr string
+	optBind           string
+	optAssetDir       string
+	optServiceIDAddr  string
+	optReloadTemplate bool
 )
 
 func setup() (err error) {
@@ -23,6 +24,9 @@ func setup() (err error) {
 		return
 	}
 	if err = env.StringVar(&optServiceIDAddr, "SERVICE_ID_ADDR", "svc-id:3000"); err != nil {
+		return
+	}
+	if err = env.BoolVar(&optReloadTemplate, "RELOAD_TEMPLATE", false); err != nil {
 		return
 	}
 	return
@@ -40,8 +44,9 @@ func main() {
 	}
 
 	f := foxtrot.New(foxtrot.Options{
-		Addr:     optBind,
-		AssetDir: optAssetDir,
+		Addr:           optBind,
+		AssetDir:       optAssetDir,
+		ReloadTemplate: optReloadTemplate,
 	})
 
 	c := nrpc.NewClient(nrpc.ClientOptions{})
