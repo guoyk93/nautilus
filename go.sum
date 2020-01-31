@@ -21,6 +21,12 @@ github.com/cenkalti/backoff/v4 v4.0.0 h1:6VeaLF9aI+MAUQ95106HwWzYZgJJpZ4stumjj6R
 github.com/cenkalti/backoff/v4 v4.0.0/go.mod h1:eEew/i+1Q6OrCDZh3WiXYv3+nJwBASZ8Bog/87DQnVg=
 github.com/cespare/xxhash/v2 v2.1.1 h1:6MnRN8NT7+YBpUIWxHtefFZOKTAPgGjpQSxqLNn0+qY=
 github.com/cespare/xxhash/v2 v2.1.1/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
+github.com/chanxuehong/rand v0.0.0-20180830053958-4b3aff17f488 h1:6d1ijTov542DDRWsFdnPYeGWnlRxlzbpEaJuNJtBQiU=
+github.com/chanxuehong/rand v0.0.0-20180830053958-4b3aff17f488/go.mod h1:h13adSJmQ5tsaV9bR72eTp7ePXJ2WIWyK6heLeietxA=
+github.com/chanxuehong/util v0.0.0-20181116100727-caf892acd09c h1:+bidl2o5S+JFtpiJdUPrgHYE922v3RgHKPqzojUVRyw=
+github.com/chanxuehong/util v0.0.0-20181116100727-caf892acd09c/go.mod h1:oCc2u0egGweOE68RdURGznc2LgbCrdGAAkXOQw2CuNM=
+github.com/chanxuehong/wechat v0.0.0-20190521093015-fafb751f9916 h1:uD+wIaoJkd0RznEoYFhjA4dHS30iP5D+TLTeYb+5Z4U=
+github.com/chanxuehong/wechat v0.0.0-20190521093015-fafb751f9916/go.mod h1:BO4IXwEfyapf9pSD8vEInR6JjnmQBxBw7VJKB3NZuiI=
 github.com/cloudflare/golz4 v0.0.0-20150217214814-ef862a3cdc58/go.mod h1:EOBUe0h4xcZ5GoxqC5SDxFQ8gwyZPKQoEzownBlhI80=
 github.com/codahale/hdrhistogram v0.0.0-20161010025455-3a0bb77429bd/go.mod h1:sE/e/2PUdi/liOCUjSTXgM1o87ZssimdTWN964YiIeI=
 github.com/coreos/go-systemd v0.0.0-20190321100706-95778dfbb74e/go.mod h1:F5haX7vjVVG0kc13fIWeqUViNPyEJxv/OmvnBo0Yme4=
@@ -55,6 +61,7 @@ github.com/go-playground/universal-translator v0.17.0 h1:icxd5fm+REJzpZx7ZfpaD87
 github.com/go-playground/universal-translator v0.17.0/go.mod h1:UkSxE5sNxxRwHyU+Scu5vgOQjsIJAF8j9muTVoKLVtA=
 github.com/go-playground/validator/v10 v10.1.0 h1:LNfPbVcg93V/91tkAQH8nbFbFn7u2X4hHnLMeRZHIMM=
 github.com/go-playground/validator/v10 v10.1.0/go.mod h1:uOYAAleCW8F/7oMFd6aG0GOhaH6EGOAJShg8Id5JGkI=
+github.com/go-redis/redis v6.14.2+incompatible h1:UE9pLhzmWf+xHNmZsoccjXosPicuiNaInPgym8nzfg0=
 github.com/go-redis/redis v6.14.2+incompatible/go.mod h1:NAIEuMOZ/fxfXJIrKDQDz8wamY7mA7PouImQ2Jvg6kA=
 github.com/go-sql-driver/mysql v1.4.1/go.mod h1:zAC/RDZ24gD3HViQzih4MyKcchzm+sOG5ZlKdlhCg5w=
 github.com/go-stack/stack v1.8.0/go.mod h1:v0f6uXyyMGvRgIKkXu+yp6POWl0qKG85gN/melR3HDY=
