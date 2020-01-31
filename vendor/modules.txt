@@ -4,6 +4,17 @@ github.com/beorn7/perks/quantile
 github.com/cenkalti/backoff/v4
 # github.com/cespare/xxhash/v2 v2.1.1
 github.com/cespare/xxhash/v2
+# github.com/chanxuehong/rand v0.0.0-20180830053958-4b3aff17f488
+github.com/chanxuehong/rand
+# github.com/chanxuehong/util v0.0.0-20181116100727-caf892acd09c
+github.com/chanxuehong/util/security
+# github.com/chanxuehong/wechat v0.0.0-20190521093015-fafb751f9916
+github.com/chanxuehong/wechat/internal/debug/api
+github.com/chanxuehong/wechat/internal/debug/api/retry
+github.com/chanxuehong/wechat/internal/debug/callback
+github.com/chanxuehong/wechat/internal/util
+github.com/chanxuehong/wechat/mp/core
+github.com/chanxuehong/wechat/util
 # github.com/creasty/defaults v1.3.0
 github.com/creasty/defaults
 # github.com/davecgh/go-spew v1.1.1
