@@ -9,6 +9,11 @@ type MPTokenService struct {
 	ats core.AccessTokenServer
 }
 
+func (s *MPTokenService) HealthCheck(ctx context.Context) (err error) {
+	_, err = s.Get(ctx)
+	return
+}
+
 func (s *MPTokenService) Get(ctx context.Context) (out GetResp, err error) {
 	out.AccessToken, err = s.ats.Token()
 	return
