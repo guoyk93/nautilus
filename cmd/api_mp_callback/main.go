@@ -1,19 +1,23 @@
 package main
 
 import (
+	"fmt"
 	"github.com/chanxuehong/wechat/mp/core"
 	"github.com/chanxuehong/wechat/mp/message/callback/request"
 	"github.com/chanxuehong/wechat/mp/message/callback/response"
 	"github.com/rs/zerolog/log"
 	"go.guoyk.net/env"
+	"go.guoyk.net/nrpc/v2"
 	"nautilus/opts/opts_mp"
 	"nautilus/pkg/exe"
+	"nautilus/svc/svc_user"
 	"net/http"
 )
 
 var (
-	optBind string
-	optsMP  opts_mp.Options
+	optBind            string
+	optsMP             opts_mp.Options
+	optServiceUserAddr string
 )
 
 func setup() (err error) {
@@ -21,6 +25,9 @@ func setup() (err error) {
 		return
 	}
 	if err = opts_mp.Load(&optsMP); err != nil {
+		return
+	}
+	if err = env.StringVar(&optServiceUserAddr, "SERVICE_USER_ADDR", "svc-user:3000"); err != nil {
 		return
 	}
 	return
@@ -37,6 +44,11 @@ func main() {
 		return
 	}
 
+	nc := nrpc.NewClient(nrpc.ClientOptions{})
+	nc.Register("UserService", optServiceUserAddr)
+
+	uc := svc_user.NewClient(nc)
+
 	mmux := core.NewServeMux()
 	mmux.DefaultEventHandleFunc(func(c *core.Context) {
 		_ = c.NoneResponse()
@@ -46,9 +58,15 @@ func main() {
 	})
 	mmux.MsgHandleFunc(request.MsgTypeText, func(c *core.Context) {
 		msg := request.GetText(c.MixedMsg)
-		resp := response.NewText(msg.FromUserName, msg.ToUserName, msg.CreateTime, "Re: "+msg.Content)
+		u, err := uc.GetByMPOpenID(c.Request.Context(), msg.FromUserName)
+		if err != nil {
+			resp := response.NewText(msg.FromUserName, msg.ToUserName, msg.CreateTime, "Err: "+err.Error())
+			_ = c.AESResponse(resp, 0, "", nil)
+		} else {
+			resp := response.NewText(msg.FromUserName, msg.ToUserName, msg.CreateTime, fmt.Sprintf("来自 %s:\n%s", u.Nickname, msg.Content))
+			_ = c.AESResponse(resp, 0, "", nil)
+		}
 		log.Info().Str("from", msg.FromUserName).Str("text", msg.Content).Msg("received")
-		_ = c.AESResponse(resp, 0, "", nil)
 	})
 	ms := core.NewServer(optsMP.Org, optsMP.AppID, optsMP.AppToken, optsMP.AppAESKey, mmux, nil)
 
