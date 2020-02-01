@@ -19,7 +19,7 @@ func setup() (err error) {
 	if err = env.StringVar(&optBind, "BIND", ":4000"); err != nil {
 		return
 	}
-	if optsMP, err = opts_mp.Load(); err != nil {
+	if err = opts_mp.Load(&optsMP); err != nil {
 		return
 	}
 	return

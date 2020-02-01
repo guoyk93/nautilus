@@ -10,7 +10,7 @@ type Options struct {
 	AppAESKey string
 }
 
-func Load() (opts Options, err error) {
+func Load(opts *Options) (err error) {
 	if err = env.StringVar(&opts.Org, "MP_ORG", ""); err != nil {
 		return
 	}

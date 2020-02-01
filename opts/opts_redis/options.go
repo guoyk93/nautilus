@@ -8,7 +8,7 @@ type Options struct {
 	Pass string
 }
 
-func Load() (opts Options, err error) {
+func Load(opts *Options) (err error) {
 	if err = env.StringVar(&opts.Host, "REDIS_HOST", "127.0.0.1"); err != nil {
 		return
 	}
