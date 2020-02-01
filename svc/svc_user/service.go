@@ -36,6 +36,27 @@ func NewService(opts ServiceOptions) *UserService {
 	}
 }
 
+func (s *UserService) findOrCreateUserByAuth(ctx context.Context, kind string, name string) (auth Auth, user User, err error) {
+	var missing bool
+	if err = s.db.First(&auth, Auth{Kind: kind, Name: name}).Error; err != nil {
+		if !gorm.IsRecordNotFoundError(err) {
+			return
+		}
+		missing = true
+	}
+	if missing {
+		if auth.UserID, err = s.idClient.NextOne(ctx); err != nil {
+			return
+		}
+		auth.Kind, auth.Name = kind, name
+		if err = s.db.Create(&auth).Error; err != nil {
+			return
+		}
+	}
+	err = s.db.Where(User{ID: auth.UserID}).Attrs(User{Nickname: fmt.Sprintf("用户(%d)", auth.UserID)}).FirstOrCreate(&user).Error
+	return
+}
+
 func (s *UserService) HealthCheck(ctx context.Context) error {
 	return s.db.Exec("SELECT VERSION();").Error
 }
@@ -45,18 +66,12 @@ func (s *UserService) Get(ctx context.Context, req *GetQuery) (out GetResp, err 
 		err = nrpc.Solid(errors.New("missing argument mp_open_id"))
 		return
 	}
-	var newUserID int64
-	if newUserID, err = s.idClient.NextOne(ctx); err != nil {
-		return
-	}
-	var auth Auth
-	if err = s.db.Where(Auth{Kind: CredKindMPOpenID, Name: req.MPOpenID}).Attrs(Auth{UserID: newUserID}).FirstOrCreate(&auth).Error; err != nil {
-		return
-	}
+
 	var user User
-	if err = s.db.Where(User{ID: auth.UserID}).Attrs(User{Nickname: fmt.Sprintf("用户(%d)", auth.UserID)}).FirstOrCreate(&user).Error; err != nil {
+	if _, user, err = s.findOrCreateUserByAuth(ctx, CredKindMPOpenID, req.MPOpenID); err != nil {
 		return
 	}
+
 	out.ID = strconv.FormatInt(user.ID, 10)
 	out.Nickname = user.Nickname
 	return
