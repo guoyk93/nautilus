@@ -36,6 +36,10 @@ func NewService(opts ServiceOptions) *UserService {
 	}
 }
 
+func (s *UserService) HealthCheck(ctx context.Context) error {
+	return s.db.Exec("SELECT VERSION();").Error
+}
+
 func (s *UserService) Get(ctx context.Context, req *GetQuery) (out GetResp, err error) {
 	if len(req.MPOpenID) == 0 {
 		err = nrpc.Solid(errors.New("missing argument mp_open_id"))
