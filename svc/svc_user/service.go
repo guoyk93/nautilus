@@ -50,10 +50,10 @@ func (s *UserService) Get(ctx context.Context, req *GetQuery) (out GetResp, err 
 		return
 	}
 	var user User
-	if err = s.db.Where(User{ID: auth.UserID}).FirstOrCreate(&user).Error; err != nil {
+	if err = s.db.Where(User{ID: auth.UserID}).Attrs(User{Nickname: fmt.Sprintf("用户(%d)", auth.UserID)}).FirstOrCreate(&user).Error; err != nil {
 		return
 	}
 	out.ID = strconv.FormatInt(user.ID, 10)
-	out.Nickname = fmt.Sprintf("用户(%d)", user.ID)
+	out.Nickname = user.Nickname
 	return
 }
