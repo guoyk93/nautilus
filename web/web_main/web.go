@@ -11,12 +11,12 @@ type Web struct {
 }
 
 func (w *Web) Index(c echo.Context) (err error) {
-	var id string
-	if id, err = w.ClientID.NewID(c.Request().Context()); err != nil {
+	var ids []string
+	if ids, err = w.ClientID.NextStr(c.Request().Context(), 1); err != nil {
 		return
 	}
 	err = c.Render(http.StatusOK, "index", map[string]interface{}{
-		"ID": id,
+		"ID": ids[0],
 	})
 	return
 }

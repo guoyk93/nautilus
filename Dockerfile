@@ -5,6 +5,7 @@ RUN go build -mod vendor -o /usr/local/bin/api_mp_callback nautilus/cmd/api_mp_c
 RUN go build -mod vendor -o /usr/local/bin/job_mysql_migrate nautilus/cmd/job_mysql_migrate
 RUN go build -mod vendor -o /usr/local/bin/svc_id nautilus/cmd/svc_id
 RUN go build -mod vendor -o /usr/local/bin/svc_id_test nautilus/cmd/svc_id_test
+RUN go build -mod vendor -o /usr/local/bin/svc_mp nautilus/cmd/svc_mp
 RUN go build -mod vendor -o /usr/local/bin/svc_mp_token nautilus/cmd/svc_mp_token
 RUN go build -mod vendor -o /usr/local/bin/web_main nautilus/cmd/web_main
 RUN go build -mod vendor -o /usr/local/bin/web_null nautilus/cmd/web_null
@@ -21,6 +22,7 @@ COPY --from=builder /usr/local/bin/api_mp_callback /usr/local/bin/api_mp_callbac
 COPY --from=builder /usr/local/bin/job_mysql_migrate /usr/local/bin/job_mysql_migrate
 COPY --from=builder /usr/local/bin/svc_id /usr/local/bin/svc_id
 COPY --from=builder /usr/local/bin/svc_id_test /usr/local/bin/svc_id_test
+COPY --from=builder /usr/local/bin/svc_mp /usr/local/bin/svc_mp
 COPY --from=builder /usr/local/bin/svc_mp_token /usr/local/bin/svc_mp_token
 COPY --from=builder /usr/local/bin/web_main /usr/local/bin/web_main
 COPY --from=builder /usr/local/bin/web_null /usr/local/bin/web_null

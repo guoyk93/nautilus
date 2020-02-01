@@ -34,16 +34,8 @@ func main() {
 	ctx := trackid.Set(context.Background(), "111111111111")
 
 	for {
-		var id string
 		var ids []string
-
-		if id, err = ic.NewID(ctx); err != nil {
-			return
-		} else {
-			log.Info().Str("id", id).Msg("invoked")
-		}
-
-		if ids, err = ic.NewIDs(ctx, 10); err != nil {
+		if ids, err = ic.NextStr(ctx, 10); err != nil {
 			return
 		} else {
 			log.Info().Strs("ids", ids).Msg("invoked")

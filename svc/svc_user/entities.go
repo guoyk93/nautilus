@@ -8,6 +8,7 @@ const (
 
 type User struct {
 	ID        int64     `gorm:"column:id;primary_key;auto_increment:false"`
+	Nickname  string    `gorm:"column:nickname;type:varchar(100)"`
 	CreatedAt time.Time `gorm:"column:created_at"`
 	UpdatedAt time.Time `gorm:"column:updated_at"`
 }

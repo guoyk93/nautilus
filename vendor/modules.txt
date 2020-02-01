@@ -16,6 +16,7 @@ github.com/chanxuehong/wechat/internal/util
 github.com/chanxuehong/wechat/mp/core
 github.com/chanxuehong/wechat/mp/message/callback/request
 github.com/chanxuehong/wechat/mp/message/callback/response
+github.com/chanxuehong/wechat/mp/user
 github.com/chanxuehong/wechat/util
 # github.com/creasty/defaults v1.3.0
 github.com/creasty/defaults
@@ -32,6 +33,14 @@ github.com/go-playground/locales/currency
 github.com/go-playground/universal-translator
 # github.com/go-playground/validator/v10 v10.1.0
 github.com/go-playground/validator/v10
+# github.com/go-redis/redis v6.15.6+incompatible
+github.com/go-redis/redis
+github.com/go-redis/redis/internal
+github.com/go-redis/redis/internal/consistenthash
+github.com/go-redis/redis/internal/hashtag
+github.com/go-redis/redis/internal/pool
+github.com/go-redis/redis/internal/proto
+github.com/go-redis/redis/internal/util
 # github.com/go-sql-driver/mysql v1.4.1
 github.com/go-sql-driver/mysql
 # github.com/golang/protobuf v1.3.2

@@ -72,7 +72,7 @@ func main() {
 
 	instanceID := optClusterID<<5 | optWorkerID
 
-	svc := svc_id.NewIDService(snowflake.New(startTime, instanceID))
+	svc := svc_id.NewService(svc_id.ServiceOptions{Snowflake: snowflake.New(startTime, instanceID)})
 
 	log.Info().Uint64("cluster_id", optClusterID).Uint64("worker_id", optWorkerID).Msg("started")
 

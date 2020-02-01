@@ -37,7 +37,9 @@ func main() {
 
 	ats := core.NewDefaultAccessTokenServer(optsMP.AppID, optsMP.AppSecret, nil)
 
+	ts := svc_mp_token.NewService(svc_mp_token.ServiceOptions{AccessTokenServer: ats})
+
 	s := nrpc.NewServer(nrpc.ServerOptions{Addr: optBind})
-	s.Register(svc_mp_token.NewService(ats))
+	s.Register(ts)
 	err = exe.RunNRPCServer(s)
 }
