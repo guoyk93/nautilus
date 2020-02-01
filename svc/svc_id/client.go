@@ -30,6 +30,15 @@ func (c *Client) Next(ctx context.Context, size int) (ret []int64, err error) {
 	return
 }
 
+func (c *Client) NextOne(ctx context.Context) (ret int64, err error) {
+	var rets []int64
+	if rets, err = c.Next(ctx, 1); err != nil {
+		return
+	}
+	ret = rets[0]
+	return
+}
+
 func (c *Client) NextStr(ctx context.Context, size int) (ret []string, err error) {
 	in, out := &NextQuery{Size: size}, &NextResp{}
 
@@ -41,5 +50,14 @@ func (c *Client) NextStr(ctx context.Context, size int) (ret []string, err error
 		return
 	}
 	ret = out.IDs
+	return
+}
+
+func (c *Client) NextOneStr(ctx context.Context) (ret string, err error) {
+	var rets []string
+	if rets, err = c.NextStr(ctx, 1); err != nil {
+		return
+	}
+	ret = rets[0]
 	return
 }

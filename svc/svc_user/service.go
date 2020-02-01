@@ -3,10 +3,11 @@ package svc_user
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/jinzhu/gorm"
 	"go.guoyk.net/nrpc/v2"
 	"nautilus/svc/svc_id"
-	"nautilus/svc/svc_mp"
+	"strconv"
 )
 
 type GetQuery struct {
@@ -25,14 +26,12 @@ type ServiceOptions struct {
 
 type UserService struct {
 	db       *gorm.DB
-	client   *nrpc.Client
 	idClient *svc_id.Client
 }
 
 func NewService(opts ServiceOptions) *UserService {
 	return &UserService{
 		db:       opts.DB,
-		client:   opts.Client,
 		idClient: svc_id.NewClient(opts.Client),
 	}
 }
@@ -42,13 +41,19 @@ func (s *UserService) Get(ctx context.Context, req *GetQuery) (out GetResp, err 
 		err = nrpc.Solid(errors.New("missing argument mp_open_id"))
 		return
 	}
-	var mpinfo svc_mp.GetUserInfoResp
-	if err = s.client.Query(
-		"MPService.GetUserInfo",
-		&svc_mp.GetUserInfoQuery{OpenID: req.MPOpenID},
-		&mpinfo,
-	).Do(ctx); err != nil {
+	var newUserID int64
+	if newUserID, err = s.idClient.NextOne(ctx); err != nil {
 		return
 	}
+	var auth Auth
+	if err = s.db.Where(Auth{Kind: CredKindMPOpenID, Name: req.MPOpenID}).Attrs(Auth{UserID: newUserID}).FirstOrCreate(&auth).Error; err != nil {
+		return
+	}
+	var user User
+	if err = s.db.Where(User{ID: auth.UserID}).FirstOrCreate(&user).Error; err != nil {
+		return
+	}
+	out.ID = strconv.FormatInt(user.ID, 10)
+	out.Nickname = fmt.Sprintf("用户(%d)", user.ID)
 	return
 }

@@ -7,6 +7,7 @@ RUN go build -mod vendor -o /usr/local/bin/svc_id nautilus/cmd/svc_id
 RUN go build -mod vendor -o /usr/local/bin/svc_id_test nautilus/cmd/svc_id_test
 RUN go build -mod vendor -o /usr/local/bin/svc_mp nautilus/cmd/svc_mp
 RUN go build -mod vendor -o /usr/local/bin/svc_mp_token nautilus/cmd/svc_mp_token
+RUN go build -mod vendor -o /usr/local/bin/svc_user nautilus/cmd/svc_user
 RUN go build -mod vendor -o /usr/local/bin/web_main nautilus/cmd/web_main
 RUN go build -mod vendor -o /usr/local/bin/web_null nautilus/cmd/web_null
 RUN go build -mod vendor -o /usr/local/bin/web_redir nautilus/cmd/web_redir
@@ -24,6 +25,7 @@ COPY --from=builder /usr/local/bin/svc_id /usr/local/bin/svc_id
 COPY --from=builder /usr/local/bin/svc_id_test /usr/local/bin/svc_id_test
 COPY --from=builder /usr/local/bin/svc_mp /usr/local/bin/svc_mp
 COPY --from=builder /usr/local/bin/svc_mp_token /usr/local/bin/svc_mp_token
+COPY --from=builder /usr/local/bin/svc_user /usr/local/bin/svc_user
 COPY --from=builder /usr/local/bin/web_main /usr/local/bin/web_main
 COPY --from=builder /usr/local/bin/web_null /usr/local/bin/web_null
 COPY --from=builder /usr/local/bin/web_redir /usr/local/bin/web_redir
