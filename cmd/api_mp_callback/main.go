@@ -4,6 +4,7 @@ import (
 	"github.com/chanxuehong/wechat/mp/core"
 	"github.com/chanxuehong/wechat/mp/message/callback/request"
 	"github.com/chanxuehong/wechat/mp/message/callback/response"
+	"github.com/rs/zerolog/log"
 	"go.guoyk.net/env"
 	"nautilus/opts/opts_mp"
 	"nautilus/pkg/exe"
@@ -46,6 +47,7 @@ func main() {
 	mmux.MsgHandleFunc(request.MsgTypeText, func(c *core.Context) {
 		msg := request.GetText(c.MixedMsg)
 		resp := response.NewText(msg.FromUserName, msg.ToUserName, msg.CreateTime, "Re: "+msg.Content)
+		log.Info().Str("from", msg.FromUserName).Str("text", msg.Content).Msg("received")
 		_ = c.AESResponse(resp, 0, "", nil)
 	})
 	ms := core.NewServer(optsMP.Org, optsMP.AppID, optsMP.AppToken, optsMP.AppAESKey, mmux, nil)
